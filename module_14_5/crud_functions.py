@@ -64,7 +64,3 @@ def is_included(username):    # принимает имя пользовател
         return False
     else:
         return True
-
-
-connection.commit()    # сохраняем состояние
-connection.close()    # закрываем подключение
