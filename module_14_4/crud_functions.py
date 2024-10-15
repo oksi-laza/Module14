@@ -15,6 +15,16 @@ def initiate_db():    # функция создания таблицы, если
     );
     ''')
 
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS Users(
+    id INTEGER PRIMARY KEY,
+    username TEXT NOT NULL,
+    email TEXT NOT NULL,
+    age INT NOT NULL, 
+    balance INT NOT NULL
+    );
+    ''')
+
 
 initiate_db()
 
@@ -38,3 +48,23 @@ def get_all_products():    # возвращает все записи из та�
     products_list = cursor.fetchall()
     connection.commit()  # сохраняем изменения
     return products_list
+
+
+def add_user(username, email, age):    # добавляет пользователей в таблицу Users
+    cursor.execute(f'''
+    INSERT INTO Users (username, email, age, balance) VALUES('{username}', '{email}', '{age}', 1000)
+    ''')    # последнее значение '1000' означает, что 'balance' у новых пользователей = 1000
+    connection.commit()  # сохраняем состояние БД
+
+
+def is_included(username):    # принимает имя пользователя и возвращает True, если пользователь есть в таблице Users
+    check_user = cursor.execute('SELECT * FROM Users WHERE username = ?', (username,)).fetchone()
+    connection.commit()
+    if check_user is None:
+        return False
+    else:
+        return True
+
+
+connection.commit()    # сохраняем состояние
+connection.close()    # закрываем подключение
